@@ -21,23 +21,42 @@ from dash.dependencies import Input, Output
 import os
 
 from app import app
-from apps import layout_main, layout_list , layout_store , layout_index_string, layout_table, layout_table_header , layout_annotation, speech_data_exploler
+from apps import layout_main, layout_list , layout_store , layout_index_string, layout_table, layout_table_header , layout_annotation, layout_lifelog
 
 
+
+################
+## static_dir ##
+################
 
 UPLOAD_DIRECTORY = "uploads/app_uploaded_files"
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
 
+
+
+############
+## server ##
+############
+
+
 namu=FastAPI()
+
 namu.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="static/templates")
+
+# app.server  from app.py    Dash
+namu.mount("/dash", WSGIMiddleware(app.server),name="dash")
+
+
+
+###########
+## router##
+###########
 
 @namu.get("/")
 async def root():
     return {"message" :  "Hello World"}
-
-
 
 @namu.get("/items/{item_id:int}")
 async def read_item(item_id):
@@ -139,8 +158,6 @@ def send_email_backgroundtasks(background_tasks: BackgroundTasks, email_to:str):
 ## dash ##
 ##########
 
-namu.mount("/dash", WSGIMiddleware(app.server),name="dash")
-
 app.index_string = layout_index_string.index_string
 
 ## main-page
@@ -161,20 +178,16 @@ def display_page(pathname):
 			return layout_list.layout_list
 	elif pathname == '/dash/dashboard':
 			return layout_list.layout_list
-	# elif pathname == '/dash/upload':
-	# 		return layout_upload
 	elif pathname == '/dash/apps/table_header':
 			return layout_table_header.table_header
 	elif pathname == '/dash/apps/table':
 			return layout_table.layout_table
 	elif pathname == '/dash/apps/image_annotation':
 			return layout_annotation.layout_annotation
-	elif pathname == '/dash/speech':
-			return layout_speech_data_exploler.stats_layout
-	elif pathname == '/dash/speech/sample':
-			return layout_speech_data_exploler.samples_layout	
 	elif pathname == '/dash/store':
 			return layout_store.layout_store
+	elif pathname == '/dash/apps/lifelog':
+			return layout_lifelog.layout_table
 	# elif pathname == '/dash/apps/test' or pathname == '/dash/test' :
 	# 		return test	
 	else:

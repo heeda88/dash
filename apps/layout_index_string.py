@@ -113,14 +113,14 @@ index_string = """
     <body>
 """+nav_div+"""
 			<div class="dash_content">
-				<div>My Custom header</div>
+				<div>Test page head</div>
 				{%app_entry%}
 				<footer>
 					{%config%}
 					{%scripts%}
 					{%renderer%}
 				</footer>
-				<div>My Custom footer</div>
+				<div>Test page footer</div>
 			</div>
 		</div>
     </body>
