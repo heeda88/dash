@@ -21,8 +21,8 @@ from dash.dependencies import Input, Output
 import os
 
 from app import app
-from apps import layout_main, layout_list , layout_store , layout_index_string, layout_table, layout_table_header , layout_annotation, layout_lifelog
-
+from apps import layout_main, layout_list , layout_store , layout_index_string, layout_table, layout_table_header , layout_annotation, layout_lifelog, layout_label
+from apps import layout_label_list, layout_ckd_label
 
 
 ################
@@ -188,6 +188,12 @@ def display_page(pathname):
 			return layout_store.layout_store
 	elif pathname == '/dash/apps/lifelog':
 			return layout_lifelog.layout_table
+	elif pathname == '/dash/apps/label':
+			return layout_label.layout_label
+	elif pathname == '/dash/apps/ckd_label':
+			return layout_ckd_label.layout_label
+	elif pathname == '/dash/apps/label_list':
+			return layout_label_list.layout_export
 	# elif pathname == '/dash/apps/test' or pathname == '/dash/test' :
 	# 		return test	
 	else:

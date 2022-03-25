@@ -25,9 +25,11 @@ layout_list = html.Div(children=[ html.H1('App 1'),
 	html.Br(),
 	dcc.Link('Go to table_select', href='/dash/apps/table_header'),
 	html.Br(),
-	dcc.Link('Go to App 4', href='/dash/apps/app4'),
+	dcc.Link('Go to Labelling', href='/dash/apps/label'),
 	html.Br(),
-	dcc.Link('Go to App 5', href='/dash/apps/app5'),
+ 	dcc.Link('Go to CKD-Labelling', href='/dash/apps/ckd_label'),
+	html.Br(),
+	dcc.Link('Go to Label List', href='/dash/apps/label_list'),
 	html.Br(),
 ])
 

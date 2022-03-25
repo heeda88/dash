@@ -1,6 +1,5 @@
 
-
-from dash import dcc
+from dash import dcc , State
 from dash import html
 import dash_bootstrap_components as dbc
 
@@ -55,7 +54,7 @@ def convert_table2(path:str):
     view_out_df.loc[:,'UID']="Pat_XXXXXX"
     view_out_df.loc[:,'OMOP-CDM']="CDM_XXXXX"
     table2=html.Div(children=[
-        dcc.Dropdown(options=[],placeholder=f'File : CDM_원천데이터.xls'),
+        dcc.Dropdown(options=[],placeholder=f'File : CDM_{os.path.basename(path)}'),
         dash_table.DataTable(
         columns=[{"name": i, "id": i} for i in view_out_df.columns],
         data=view_out_df.to_dict('records'),
@@ -85,51 +84,44 @@ def file_download_link(filename):
     location = "/download/{}".format(urlquote(filename))
     return html.A(filename, href=location)
 
+def update_file_list(UPLOAD_DIRECTORY=UPLOAD_DIRECTORY):
+    return glob(UPLOAD_DIRECTORY)
 
-# layout_store = html.Div(
-#     [
-#         html.H6("Upload"),
-#         dcc.Upload(
-#             id="upload-data",
-#             children=html.Div(
-#                 ["Drag and drop or click to select a file to upload."]
-#             ),
-#             style={
-#                 "width": "100%",
-#                 "height": "60px",
-#                 "lineHeight": "60px",
-#                 "borderWidth": "1px",
-#                 "borderStyle": "dashed",
-#                 "borderRadius": "5px",
-#                 "textAlign": "center",
-#                 "margin": "10px",
-#             },
-#             multiple=True,
-#         ),
-#         html.H6("File List"),
-#         html.Ul(id="file-list"),
-#     ],
-#     style={"max-width": "500px"},
-# )
-
-layout_table= html.Div(children=[
-#   dbc.Row(children=[layout_store]),
-    dbc.Row(children= [
-        dbc.Col([
-
-            dcc.Dropdown(id='app-lifelog-dropdown',
-                            options=[{'label' : f'File : {os.path.basename(index)}', 'value': index } for index in glob(UPLOAD_DIRECTORY)]
-            ),
-            html.Div(id='app-liflog-column',children=[]),
-            html.Div(id='app-lifelog-input-display'),
-            html.Div(children=[]),
-                
-        ],sm=6), dbc.Col([
-            html.Div(id='app-lifelog-output-display')
+layout_table= html.Div(
+    children=[
+        dbc.Row(children=[
+            dbc.Col([
+                dbc.Button(children=["To CDM convert"],style={'textAlign':'center',"font-size":"20px","font-weight":"bold","color":"#ffffff","background":"#B4CFB0"})
+            ],sm=5),
+            dbc.Col([
+                dbc.Button(id='app-lifelog-update',n_clicks=0,children=["update"],style={'textAlign':'center',"font-size":"20px","font-weight":"bold","color":"#ffffff","background":"#B4CFB0"})
+            ],sm=1),
+            dbc.Col([
+                dbc.Button(children=["완료_"],style={'textAlign':'center',"font-size":"20px","font-weight":"bold","color":"#ffffff","background":"#789395"})
+            ],sm=1),
+            dbc.Col([
+                dbc.Button(children=["재검토"],style={'textAlign':'center',"font-size":"20px","font-weight":"bold","color":"#ffffff","background":"#FFBFA3"})
+            ],sm=1),
+        ],style={"margin-bottom":"20px"}),
+        dbc.Row(children= [
+            dbc.Col([
+                dcc.Dropdown(id='app-lifelog-dropdown',
+                                options=[{'label' : f'File : {os.path.basename(index)}', 'value': index } for index in update_file_list()]
+                ),
+                html.Div(id='app-liflog-column',children=[]),
+                html.Div(id='app-lifelog-input-display'),
+                html.Div(children=[]),
+                    
+            ],sm=6), 
+            dbc.Col([
+                html.Div(id='app-lifelog-output-display')
+            
+            ],sm=6),
+        ]),
         
-        ],sm=6),
     ])
-])
+
+# 무조건 call back을 시켜야함 
 
 
 @app.callback(  Output('app-lifelog-input-display','children'),
@@ -145,4 +137,18 @@ def tableCallback(value):
         return input_table, output_table
     else:
         return 'You have selected "{}"'.format(value),""
-    
+html.Div([
+    html.Button('Button 1', id='btn-nclicks-1', n_clicks=0),
+    html.Button('Button 2', id='btn-nclicks-2', n_clicks=0),
+    html.Button('Button 3', id='btn-nclicks-3', n_clicks=0),
+    html.Div(id='container-button-timestamp')
+])
+
+@app.callback(
+    Output('app-lifelog-dropdown', 'options'),
+    Input('app-lifelog-update', 'n_clicks'),
+    # State('input-on-submit', 'value')
+)
+def update_output(n_clicks):
+    n_clicks
+    return [{'label' : f'File : {os.path.basename(index)}', 'value': index } for index in update_file_list()]

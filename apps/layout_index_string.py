@@ -113,16 +113,42 @@ index_string = """
     <body>
 """+nav_div+"""
 			<div class="dash_content">
-				<div>Test page head</div>
+				<div></div>
 				{%app_entry%}
 				<footer>
 					{%config%}
 					{%scripts%}
 					{%renderer%}
 				</footer>
-				<div>Test page footer</div>
+				<div></div>
 			</div>
 		</div>
     </body>
 </html>
 """
+
+# index_string = """
+# <!DOCTYPE html>
+# <html>
+#     <head>
+#         {%metas%}
+#         <title>{%title%}</title>
+#         {%favicon%}
+#         {%css%}
+#     </head>
+#     <body>
+# """+nav_div+"""
+# 			<div class="dash_content">
+# 				<div>Test page head</div>
+# 				{%app_entry%}
+# 				<footer>
+# 					{%config%}
+# 					{%scripts%}
+# 					{%renderer%}
+# 				</footer>
+# 				<div>Test page footer</div>
+# 			</div>
+# 		</div>
+#     </body>
+# </html>
+# """

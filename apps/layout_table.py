@@ -47,3 +47,8 @@ def tableCallback(value):
         return dcc.Markdown( open(f'./{value}','r').read() )
     else:
         return 'You have selected "{}"'.format(value)
+
+# @app.callback(  Output('app-table-dropdown','options'),Input('app-table-dropdown','value')
+# )
+# def tableListCallback(valu):
+#     return [{'label' : f'File : {index}', f'value': {index} } for index in glob(UPLOAD_DIRECTORY)]
